@@ -1,12 +1,8 @@
-# Use golang:alpine (always points to latest stable Go image)
-FROM golang:alpine AS builder
-
-# Enable automatic Go toolchain downloads for packages requiring higher Go versions (e.g., >= go 1.26)
-ENV GOTOOLCHAIN=auto
+FROM golang:1.23-alpine AS builder
 
 RUN apk add --no-cache git ca-certificates
 
-RUN go install -v github.com/itszeeshan/subdomainx/v2@latest && \
+RUN go install -v github.com/itszeeshan/subdomainx@v1.5.0 && \
     go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest && \
     go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest && \
     go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
@@ -30,4 +26,5 @@ WORKDIR /app
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "subdomainx serve --port 8080 --api-key ${SUBDOMAINX_API_KEY:-dev-key} --output /tmp/scans & sleep 2 && uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Bind Uvicorn directly to PORT environment variable provided by Railway
+CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
