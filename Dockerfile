@@ -29,4 +29,4 @@ WORKDIR /app
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "subdomainx serve --port 8081 --api-key ${SUBDOMAINX_API_KEY:-dev-key} --output /tmp/scans & sleep 2 && uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
