@@ -26,6 +26,9 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY . /app
 WORKDIR /app
 
+# Ensure Python can resolve modules from root /app (fixes 'ModuleNotFoundError: No module named config')
+ENV PYTHONPATH=/app
+
 EXPOSE 8000
 
-CMD ["sh", "-c", "subdomainx serve --port 8081 --api-key ${SUBDOMAINX_API_KEY:-dev-key} --output /tmp/scans & sleep 2 && uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
