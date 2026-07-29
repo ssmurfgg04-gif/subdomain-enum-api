@@ -1,4 +1,8 @@
-FROM golang:1.26-alpine AS builder
+# Use golang:alpine (always points to latest stable Go image)
+FROM golang:alpine AS builder
+
+# Enable automatic Go toolchain downloads for packages requiring higher Go versions (e.g., >= go 1.26)
+ENV GOTOOLCHAIN=auto
 
 RUN apk add --no-cache git ca-certificates
 
