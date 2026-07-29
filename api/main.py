@@ -12,14 +12,15 @@ from fastapi import FastAPI, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from .config import (
+# Fixed: Converted relative imports to absolute imports
+from config import (
     SUBDOMAINX_URL,
     SUBDOMAINX_API_KEY,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
     DIRECT_API_KEYS,
 )
-from .models import ScanRequest, ScanCreateResponse, ScanStatusResponse, HealthResponse
+from models import ScanRequest, ScanCreateResponse, ScanStatusResponse, HealthResponse
 
 load_dotenv()
 
