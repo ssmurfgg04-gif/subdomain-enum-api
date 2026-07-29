@@ -12,9 +12,11 @@ from fastapi import FastAPI, HTTPException, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+# Clean absolute imports
 from config import (
     SUBDOMAINX_URL,
     SUBDOMAINX_API_KEY,
+    RAPIDAPI_KEY,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
     DIRECT_API_KEYS,
@@ -23,12 +25,10 @@ from models import ScanRequest, ScanCreateResponse, ScanStatusResponse, HealthRe
 
 load_dotenv()
 
-RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-
 if STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
 
-# Safe URL fallback prevents httpx from throwing InvalidURL at import time
+# Prevent httpx from throwing InvalidURL at import time
 target_url = SUBDOMAINX_URL if (SUBDOMAINX_URL and SUBDOMAINX_URL.startswith("http")) else "http://127.0.0.1:8080"
 client = httpx.AsyncClient(base_url=target_url, timeout=30.0)
 
@@ -106,7 +106,6 @@ async def health():
     "/v1/subdomain/scan",
     response_model=ScanCreateResponse,
     summary="Start a subdomain scan",
-    description="Start an asynchronous subdomain enumeration scan.",
 )
 async def create_scan(
     scan_req: ScanRequest,
@@ -176,10 +175,7 @@ async def get_scan(
     )
 
 
-@app.get(
-    "/v1/subdomain/scans",
-    summary="List all scans",
-)
+@app.get("/v1/subdomain/scans")
 async def list_scans(auth: str = Depends(verify_auth)):
     resp = await client.get("/api/scans", headers=_subdomainx_headers())
     if resp.status_code != 200:
@@ -190,10 +186,7 @@ async def list_scans(auth: str = Depends(verify_auth)):
     return resp.json()
 
 
-@app.delete(
-    "/v1/subdomain/scan/{scan_id}",
-    summary="Cancel a running scan",
-)
+@app.delete("/v1/subdomain/scan/{scan_id}")
 async def cancel_scan(
     scan_id: str,
     auth: str = Depends(verify_auth),
