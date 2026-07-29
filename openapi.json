@@ -635,12 +635,12 @@
   },
   "servers": [
     {
-      "url": "https://subdomain-enum-api.onrender.com",
-      "description": "Direct Render"
+      "url": "https://subdomain-enum-api.up.railway.app",
+      "description": "Production (Railway)"
     },
     {
-      "url": "https://subdomain-enumeration-api.p.rapidapi.com",
-      "description": "RapidAPI Gateway"
+      "url": "http://localhost:8000",
+      "description": "Local development"
     }
   ],
   "security": [

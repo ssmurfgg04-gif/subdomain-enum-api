@@ -2,27 +2,25 @@
 
 Enterprise-grade subdomain enumeration, HTTP probing, tech fingerprinting, and takeover detection via a simple REST API.
 
-Powered by [SubdomainX](https://github.com/itszeeshan/subdomainx) and the ProjectDiscovery toolchain.
-
 ## Features
 
 - Passive subdomain enumeration (subfinder, crtsh, wayback, etc.)
-- Active HTTP probing (status codes, titles, content-length)
-- Technology fingerprinting (frameworks, languages, analytics)
-- Subdomain takeover detection (nuclei)
-- Asynchronous scanning (submit domain, poll for results)
+- Active HTTP probing (status codes, titles, content-length, webserver)
+- Technology fingerprinting (frameworks, languages, analytics, CDN)
+- Subdomain takeover detection via nuclei templates
+- Asynchronous scanning — submit a domain, poll for results
 
 ## Quick Start
 
 ```bash
 # Submit a domain for scanning
-curl -X POST https://subdomain-enum-api.onrender.com/v1/subdomain/scan \
+curl -X POST https://subdomain-enum-api.up.railway.app/v1/subdomain/scan \
   -H "x-rapidapi-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"domain": "example.com", "tools": ["subfinder", "crtsh"]}'
 
 # Poll for results
-curl https://subdomain-enum-api.onrender.com/v1/subdomain/scan/SCAN_ID \
+curl https://subdomain-enum-api.up.railway.app/v1/subdomain/scan/SCAN_ID \
   -H "x-rapidapi-key: YOUR_API_KEY"
 ```
 
@@ -47,7 +45,17 @@ curl https://subdomain-enum-api.onrender.com/v1/subdomain/scan/SCAN_ID \
 
 ## Tech Stack
 
-- **API**: FastAPI (Python)
+- **API**: FastAPI (Python), Uvicorn
 - **Scanner**: SubdomainX + subfinder + httpx + nuclei
-- **Deployment**: Docker on Render
+- **Deployment**: Docker on Railway (always-on, no sleep)
 - **Auth**: RapidAPI key validation
+
+## Local Development
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+subdomainx serve --port 8080 --api-key dev-key &
+uvicorn api.main:app --reload
+```
