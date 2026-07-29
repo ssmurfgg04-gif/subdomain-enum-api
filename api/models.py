@@ -1,16 +1,16 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 
 class ScanRequest(BaseModel):
     domain: str
-    tools: Optional[list[str]] = None
+    tools: Optional[List[str]] = None
     threads: Optional[int] = 10
     retries: Optional[int] = 3
     timeout: Optional[int] = 30
     rate_limit: Optional[int] = 100
     format: Optional[str] = "json"
-    options: Optional[dict] = None
+    options: Optional[Dict[str, Any]] = None
 
 
 class ScanCreateResponse(BaseModel):
@@ -27,7 +27,7 @@ class ScanStatusResponse(BaseModel):
     progress: int
     total_tools: int
     completed_tools: int
-    results: Optional[list[dict]] = None
+    results: Optional[List[Dict[str, Any]]] = None
     error: Optional[str] = None
 
 
