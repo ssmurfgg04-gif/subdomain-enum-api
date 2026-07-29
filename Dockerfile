@@ -1,6 +1,5 @@
 FROM golang:1.23-alpine AS builder
 
-# Enable automatic toolchain downloads for packages requiring Go 1.24+
 ENV GOTOOLCHAIN=auto
 
 RUN apk add --no-cache git ca-certificates
