@@ -23,6 +23,9 @@ from .models import ScanRequest, ScanCreateResponse, ScanStatusResponse, HealthR
 
 load_dotenv()
 
+# Read RapidAPI secret header from environment variables
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+
 if STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
 
