@@ -1,5 +1,8 @@
 FROM golang:1.23-alpine AS builder
 
+# Enable automatic toolchain downloads for packages requiring Go 1.24+
+ENV GOTOOLCHAIN=auto
+
 RUN apk add --no-cache git ca-certificates
 
 RUN go install -v github.com/itszeeshan/subdomainx@v1.5.0 && \
@@ -26,5 +29,4 @@ WORKDIR /app
 
 EXPOSE 8000
 
-# Bind Uvicorn directly to PORT environment variable provided by Railway
 CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
